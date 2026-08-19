@@ -20,6 +20,10 @@
   align-items: center;
 }
 
+.goBackButton {
+  margin-right: auto;
+}
+
 .actions {
   margin-left: auto;
 
