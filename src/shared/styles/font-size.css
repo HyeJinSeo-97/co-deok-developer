@@ -1,0 +1,95 @@
+/*
+ * ──────────────────────────────────────────────────────────────────────────
+ * 사용 방법
+ * ──────────────────────────────────────────────────────────────────────────
+ * Tailwind v4의 `@theme`에 `--text-{이름}`을 정의하면 `text-{이름}` 유틸이
+ * 자동 생성됩니다. 예: `--text-title` → 클래스 `text-title`.
+ *
+ * 짝(companion) 토큰을 함께 정의하면 `text-{이름}` 한 줄로 묶여 적용됩니다.
+ *   - `--text-{이름}--line-height` → line-height 동시 적용
+ *   - `--text-{이름}--font-weight` → font-weight 동시 적용
+ *
+ * 즉 `text-title` 하나만 써도 font-size + line-height + font-weight가 한 번에
+ * 적용되므로, `leading-*` / `font-*`를 따로 붙일 필요가 없습니다.
+ *   ✅ <h1 className="text-title">제목</h1>
+ *   ⚠️ <h1 className="text-title font-bold leading-9">  // 토큰 값을 덮어써 일관성 깨짐
+ *
+ * 덮어쓰기가 꼭 필요할 때만 뒤에 유틸을 추가하세요(가급적 지양).
+ *   <p className="text-body font-bold">강조 본문</p>  // weight만 예외적으로 덮어씀
+ * ──────────────────────────────────────────────────────────────────────────
+ */
+
+@theme {
+  /* Display / Title ─────────────────────────────────────────────────────── */
+
+  /* 최상위 강조 텍스트. 48px / 700.
+   * 용도: 랜딩 히어로 최상단 카피, 온보딩 첫 화면 등 한 화면에 1개 이하의 최대 강조.
+   * 예) <h1 className="text-display-lg">업무의 새로운 기준</h1> */
+  --text-display-lg: 3rem; /* 48px */
+  --text-display-lg--line-height: 1.1;
+  --text-display-lg--font-weight: 700;
+
+  /* 가장 큰 디스플레이 텍스트. 36px / 700.
+   * 용도: 랜딩·히어로 영역의 메인 카피, 빈 상태(EmptyState)의 큰 안내 문구.
+   * 예) <h1 className="text-display">AX 플랫폼</h1> */
+  --text-display: 2.25rem; /* 36px */
+  --text-display--line-height: 1.2;
+  --text-display--font-weight: 700;
+
+  /* 큰 강조 제목. 30px / 700.
+   * 용도: 큰 통계 숫자(대시보드 KPI), 모달 대형 타이틀, title보다 강조가 필요한 섹션 머리.
+   * 예) <p className="text-display-sm">1,284건</p> */
+  --text-display-sm: 1.875rem; /* 30px */
+  --text-display-sm--line-height: 1.25;
+  --text-display-sm--font-weight: 700;
+
+  /* 페이지 타이틀. 20px / 700.
+   * 용도: 페이지 최상단 h1 제목(BaseLayoutTitle 등 화면당 1개).
+   * 예) <h1 className="text-title">문서함</h1> */
+  --text-title: 1.25rem; /* 20px */
+  --text-title--line-height: 1.3;
+  --text-title--font-weight: 700;
+
+  /* 섹션/카드 부제목. 16px / 600.
+   * 용도: 카드 헤더, 섹션 구분 소제목, 다이얼로그 타이틀.
+   * 예) <h2 className="text-subtitle">최근 문서</h2> */
+  --text-subtitle: 1rem; /* 16px */
+  --text-subtitle--line-height: 1.4;
+  --text-subtitle--font-weight: 600;
+
+  /* Body ────────────────────────────────────────────────────────────────── */
+
+  /* 기본 본문. 16px.
+   * 용도: 일반 문단, 설명 텍스트 등 화면 기본 본문.
+   * 예) <p className="text-body">본문 내용입니다.</p> */
+  --text-body: 1rem; /* 16px */
+  --text-body--line-height: 1.6;
+
+  /* 작은 본문. 14px.
+   * 용도: 보조 설명, 표 셀 내용, 좁은 영역의 본문(BaseLayoutDescription 등).
+   * 예) <p className="text-body-sm text-muted-foreground">보조 설명</p> */
+  --text-body-sm: 0.875rem; /* 14px */
+  --text-body-sm--line-height: 1.5;
+
+  /* Label / Caption ─────────────────────────────────────────────────────── */
+
+  /* 라벨. 14px / 500.
+   * 용도: 폼 라벨, 버튼/배지 텍스트, 입력 필드 라벨.
+   * 예) <Label className="text-label">이메일</Label> */
+  --text-label: 0.875rem; /* 14px */
+  --text-label--line-height: 1.4;
+  --text-label--font-weight: 500;
+
+  /* 캡션. 12px.
+   * 용도: 도움말, 타임스탬프, 메타 정보 등 가장 작은 부가 텍스트.
+   * 예) <span className="text-caption text-muted-foreground">방금 전</span> */
+  --text-caption: 0.75rem; /* 12px */
+  --text-caption--line-height: 1.4;
+
+  /* 마이크로. 10px / 500.
+   * 용도: 좁은 배지/태그, 상태 칩, 아이콘 옆 초소형 라벨 등 caption보다도 작은 자리.
+   * 예) <span className="text-micro">NEW</span> */
+  --text-micro: 0.625rem; /* 10px */
+  --text-micro--line-height: 1.3;
+  --text-micro--font-weight: 500;
+}

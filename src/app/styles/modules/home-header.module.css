@@ -1,0 +1,29 @@
+.header {
+  position: relative;
+  height: 48px;
+  background-color: var(--color-white);
+
+  /* 로고는 absolute 로 빠져 있으므로 flex 자식은 .actions 뿐 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-inline: 16px;
+}
+
+.logo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+
+  display: flex;
+  align-items: center;
+}
+
+.actions {
+  margin-left: auto;
+
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
