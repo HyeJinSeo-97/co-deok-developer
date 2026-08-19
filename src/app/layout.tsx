@@ -1,16 +1,40 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./styles/globals.css";
 import { ResponsiveLayout } from "@/app/layout/index";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+// 한 번의 호출로 5개 굵기를 하나의 패밀리로 등록해야
+// font-light / font-bold 같은 유틸리티가 알맞은 파일을 선택함
+const nanumSquareNeo = localFont({
+  variable: "--font-nanum-square-neo",
+  src: [
+    {
+      // 폰트 자체 usWeightClass 는 350 이지만 Tailwind font-light 가 300 이라 300 으로 등록
+      path: "../../public/fonts/NanumSquareNeoOTF-Lt.otf",
+      weight: "300",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/NanumSquareNeoOTF-Rg.otf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/NanumSquareNeoOTF-Bd.otf",
+      weight: "700",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/NanumSquareNeoOTF-Eb.otf",
+      weight: "800",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/NanumSquareNeoOTF-Hv.otf",
+      weight: "900",
+      style: "normal",
+    },
+  ],
 });
 
 export const metadata: Metadata = {
@@ -20,10 +44,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
+    <html lang="en" className={`${nanumSquareNeo.variable} h-full antialiased`}>
       <body>
         <ResponsiveLayout>{children}</ResponsiveLayout>
       </body>
