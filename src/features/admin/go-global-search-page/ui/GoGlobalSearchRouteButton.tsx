@@ -1,10 +1,11 @@
 "use client";
 
-import { SEARCH_PAGE } from "@/shared/model";
-import { Button } from "@/shared/shadcn/button";
+import Link from "next/link";
 
 import { IconSearch } from "@tabler/icons-react";
-import Link from "next/link";
+
+import { SEARCH_PAGE } from "@/shared/model";
+import { Button } from "@/shared/shadcn/button";
 
 export function GoGlobalSearchRouteButton() {
   return (

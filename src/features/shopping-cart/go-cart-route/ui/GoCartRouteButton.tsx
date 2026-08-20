@@ -1,10 +1,11 @@
 "use client";
 
-import { SHOPPING_CART_PAGE } from "@/shared/model";
-import { Button } from "@/shared/shadcn/button";
+import Link from "next/link";
 
 import { IconShoppingBag } from "@tabler/icons-react";
-import Link from "next/link";
+
+import { SHOPPING_CART_PAGE } from "@/shared/model";
+import { Button } from "@/shared/shadcn/button";
 
 export function GoCartRouteButton() {
   return (

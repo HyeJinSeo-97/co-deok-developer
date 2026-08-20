@@ -1,3 +1,5 @@
+import { ContentLayout } from "@/app/_layout/index";
+
 interface HomeRootLayoutProps {
   header: React.ReactNode;
 
@@ -11,7 +13,7 @@ export default function ShoppingCartRootLayout({
   return (
     <>
       {header}
-      {children}
+      <ContentLayout>{children}</ContentLayout>
     </>
   );
 }

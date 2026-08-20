@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import "./styles/globals.css";
-import { ResponsiveLayout } from "@/app/layout/index";
+
+import { ResponsiveLayout } from "@/app/_layout";
+
+import "./_styles/globals.css";
 
 // 한 번의 호출로 5개 굵기를 하나의 패밀리로 등록해야
 // font-light / font-bold 같은 유틸리티가 알맞은 파일을 선택함
@@ -44,7 +46,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${nanumSquareNeo.variable} h-full antialiased`}>
+    <html lang="en" className={`${nanumSquareNeo.variable} h-dvh antialiased`}>
       <body>
         <ResponsiveLayout>{children}</ResponsiveLayout>
       </body>

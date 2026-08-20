@@ -1,9 +1,9 @@
-import styles from "@/app/styles/modules/home-header.module.css";
 import Image from "next/image";
 import Link from "next/link";
 
+import styles from "@/app/_styles/modules/home-header.module.css";
 import { GoGlobalSearchRouteButton } from "@/features/admin/go-global-search-page";
-import { GoCartRouteButton } from "@/features/shopping-cart/go-cart-page";
+import { GoCartRouteButton } from "@/features/shopping-cart/go-cart-route";
 
 export default function HomeHeader() {
   return (

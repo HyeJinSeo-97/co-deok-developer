@@ -1,3 +1,6 @@
+import { ContentLayout } from "@/app/_layout/index";
+import { ProductsStoreProvider, SearchStoreProvider } from "@/app/_providers";
+
 interface HomeRootLayoutProps {
   header: React.ReactNode;
 
@@ -9,9 +12,12 @@ export default function SearchRootLayout({
   children,
 }: HomeRootLayoutProps) {
   return (
-    <>
-      {header}
-      {children}
-    </>
+    <SearchStoreProvider>
+      <ProductsStoreProvider>
+        {header}
+
+        <ContentLayout>{children}</ContentLayout>
+      </ProductsStoreProvider>
+    </SearchStoreProvider>
   );
 }

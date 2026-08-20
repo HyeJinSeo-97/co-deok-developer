@@ -1,8 +1,10 @@
 "use client";
 
-import { Button } from "@/shared/shadcn/button";
-import { IconChevronLeft } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
+
+import { IconChevronLeft } from "@tabler/icons-react";
+
+import { Button } from "@/shared/shadcn/button";
 
 export function GoBackRouteButton() {
   const router = useRouter();

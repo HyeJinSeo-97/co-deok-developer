@@ -1,3 +1,17 @@
+import {
+  RealTimePurchaseRankingList,
+  RecentSearches,
+  SearchProductsInput,
+} from "./_ui";
+
 export default function SearchRootPage() {
-  return <div>통합 제품 검색 페이지</div>;
+  return (
+    <div className={"flex flex-col gap-2 py-2"}>
+      <SearchProductsInput />
+
+      <RecentSearches />
+
+      <RealTimePurchaseRankingList />
+    </div>
+  );
 }
