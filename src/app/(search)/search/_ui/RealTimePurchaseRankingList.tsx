@@ -6,7 +6,7 @@ import Link from "next/link";
 import { IconTrendingUp } from "@tabler/icons-react";
 
 import { useProductsStore } from "@/app/_stores";
-import type { Product } from "@/app/search/_model";
+import type { Product } from "@/app/(search)/search/_model";
 import { SalePrice } from "@/entities/product/ui";
 import { Item, ItemContent, ItemMedia, ItemTitle } from "@/shared/shadcn/item";
 import { VerticalList, VerticalListItem } from "@/shared/ui/animation";

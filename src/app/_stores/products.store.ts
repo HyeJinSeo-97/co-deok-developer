@@ -4,7 +4,7 @@ import { createStore } from "zustand/vanilla";
 import {
   type Product,
   PURCHASE_RANKING_DUMMY_PRODUCTS,
-} from "@/app/search/_model";
+} from "@/app/(search)/search/_model";
 
 export interface ProductsState {
   /** 실시간 구매 랭킹 화면에 노출할 상품 목록 */

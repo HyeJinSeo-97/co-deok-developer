@@ -3,7 +3,7 @@
 import { IconHistory, IconX } from "@tabler/icons-react";
 
 import { useSearchStore } from "@/app/_stores";
-import type { SearchQuery } from "@/app/search/_model";
+import type { SearchQuery } from "@/app/(search)/search/_model";
 import { Button } from "@/shared/shadcn/button";
 
 import { SearchItemTemplate } from "./SearchItemTemplate";

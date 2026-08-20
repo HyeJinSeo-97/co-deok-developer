@@ -1,15 +1,21 @@
 import type { StoreApi } from "zustand";
 import { createStore } from "zustand/vanilla";
 
-import type { SearchQuery } from "@/app/search/_model";
+import type { SearchQuery } from "@/app/(search)/search/_model";
 import { generateNewUuid } from "@/shared/lib";
 
 export interface SearchState {
+  /** 검색 상품 */
+  searchQuery: string;
+
   /** 최근 검색어 목록 (최신순) */
   searches: SearchQuery[];
 }
 
 export interface SearchActions {
+  /** 검색어 입력 */
+  inputSearchQuery: (query: string) => void;
+
   /** 검색어 추가 */
   addSearch: (query: string) => void;
 
@@ -27,6 +33,7 @@ export type SearchStoreApi = StoreApi<SearchStore>;
  * search 스토어 기본값
  */
 export const initSearchStore = (): SearchState => ({
+  searchQuery: "",
   searches: [],
 });
 
@@ -38,6 +45,8 @@ export const createSearchStore = (
 ): SearchStoreApi =>
   createStore<SearchStore>()((set) => ({
     ...initState,
+
+    inputSearchQuery: (query) => set({ searchQuery: query }),
 
     addSearch: (query) =>
       set((state) => {
