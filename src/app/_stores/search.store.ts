@@ -1,7 +1,11 @@
 import type { StoreApi } from "zustand";
 import { createStore } from "zustand/vanilla";
 
-import type { SearchQuery } from "@/app/(search)/search/_model";
+import {
+  SEARCH_SUGGESTION_DUMMY_LIST,
+  type SearchQuery,
+  type SearchSuggestion,
+} from "@/app/(search)/search/_model";
 import { generateNewUuid } from "@/shared/lib";
 
 export interface SearchState {
@@ -10,6 +14,9 @@ export interface SearchState {
 
   /** 최근 검색어 목록 (최신순) */
   searches: SearchQuery[];
+
+  /** 검색어 입력 시 노출할 검색 제안 전체 목록 */
+  suggestions: SearchSuggestion[];
 }
 
 export interface SearchActions {
@@ -24,6 +31,9 @@ export interface SearchActions {
 
   /** 검색어 전체 삭제 */
   clearSearches: () => void;
+
+  /** 검색 제안 목록 교체 */
+  setSuggestions: (suggestions: SearchSuggestion[]) => void;
 }
 
 export type SearchStore = SearchState & SearchActions;
@@ -35,6 +45,8 @@ export type SearchStoreApi = StoreApi<SearchStore>;
 export const initSearchStore = (): SearchState => ({
   searchQuery: "",
   searches: [],
+  // TODO: API 연동 시 빈 배열로 되돌리고 더미 데이터 제거
+  suggestions: SEARCH_SUGGESTION_DUMMY_LIST,
 });
 
 /**
@@ -73,5 +85,7 @@ export const createSearchStore = (
         searches: state.searches.filter((search) => search.id !== id),
       })),
 
-    clearSearches: () => set(initSearchStore()),
+    clearSearches: () => set({ searches: [] }),
+
+    setSuggestions: (suggestions) => set({ suggestions }),
   }));

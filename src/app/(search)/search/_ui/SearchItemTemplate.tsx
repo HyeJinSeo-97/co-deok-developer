@@ -32,7 +32,7 @@ export function SearchItemTemplate({
           {actions}
         </CardTitle>
 
-        {children}
+        <div className={"py-2"}>{children}</div>
       </CardContent>
     </Card>
   );

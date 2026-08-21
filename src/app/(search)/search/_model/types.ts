@@ -26,3 +26,11 @@ export type Product = {
   /** 제품 썸네일 이미지 */
   thumbnail: string;
 };
+
+/** 검색어 입력 시 노출할 검색 제안 */
+export type SearchSuggestion = {
+  id: string;
+
+  /** 제안 검색어 */
+  keyword: string;
+};

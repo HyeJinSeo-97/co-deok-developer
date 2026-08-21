@@ -1,33 +1,12 @@
 "use client";
 
-import { IconHistory, IconX } from "@tabler/icons-react";
+import { IconHistory } from "@tabler/icons-react";
 
 import { useSearchStore } from "@/app/_stores";
-import type { SearchQuery } from "@/app/(search)/search/_model";
 import { Button } from "@/shared/shadcn/button";
 
+import { RecentSearch } from "./RecentSearch";
 import { SearchItemTemplate } from "./SearchItemTemplate";
-
-interface RecentSearchProps {
-  search: SearchQuery;
-}
-
-function RecentSearch({ search }: RecentSearchProps) {
-  const removeSearch = useSearchStore((state) => state.removeSearch);
-
-  return (
-    <li className={"w-full inline-flex items-center justify-between"}>
-      <span>{search.query}</span>
-      <Button
-        variant={null}
-        size={"icon-xs"}
-        onClick={() => removeSearch(search.id)}
-      >
-        <IconX />
-      </Button>
-    </li>
-  );
-}
 
 export function RecentSearches() {
   const searches = useSearchStore((state) => state.searches);
@@ -44,7 +23,7 @@ export function RecentSearches() {
           </Button>
         }
       >
-        <ul className={"py-2 space-y-2"}>
+        <ul className={"space-y-2"}>
           {searches.map((search) => (
             <RecentSearch key={search.id} search={search} />
           ))}
