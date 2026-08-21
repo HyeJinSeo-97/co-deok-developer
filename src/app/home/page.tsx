@@ -1,9 +1,10 @@
-import { HeroBanner } from "./_ui";
+import { SecretSaleProduct, HeroBanner } from "./_ui";
 
 export default function HomeRootPage() {
   return (
-    <div>
+    <div className={"space-y-4"}>
       <HeroBanner />
+      <SecretSaleProduct />
     </div>
   );
 }
