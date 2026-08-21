@@ -1,3 +1,6 @@
+import { BannerStoreProvider } from "@/app/_providers";
+import { HERO_BANNER_DUMMY } from "@/app/home/_model";
+
 interface HomeRootLayoutProps {
   header: React.ReactNode;
 
@@ -9,9 +12,9 @@ export default function HomeRootLayout({
   children,
 }: HomeRootLayoutProps) {
   return (
-    <>
+    <BannerStoreProvider initialState={{ heroBanner: HERO_BANNER_DUMMY }}>
       {header}
       {children}
-    </>
+    </BannerStoreProvider>
   );
 }
