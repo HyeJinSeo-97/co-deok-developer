@@ -1,13 +1,33 @@
 .header {
-  position: relative;
-  height: 48px;
-  background-color: var(--color-white);
+  position: fixed;
+  top: 0;
+  /* fixed 는 뷰포트 기준이라 ResponsiveLayout 의 max-w-5xl 을 상속받지 못함.
+     left/right 0 + margin-inline auto 로 같은 폭으로 제한하고 가운데 정렬 */
+  left: 0;
+  right: 0;
+  margin-inline: auto;
+  z-index: 100;
+
+  width: 100%;
+  max-width: var(--container-5xl);
+  /* 스크롤 전 기본 높이. 스크롤되면 .scrolled 가 48px 로 줄임 */
+  height: 66px;
+  transition: height 200ms ease;
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(1px);
+  border-bottom-width: 1px;
+  border-bottom-color: rgba(255, 255, 255, 0.15);
 
   /* 로고는 absolute 로 빠져 있으므로 flex 자식은 .actions 뿐 */
   display: flex;
   align-items: center;
   justify-content: center;
   padding-inline: 16px;
+}
+
+/* 스크롤 중 헤더 축소 */
+.scrolled {
+  height: 48px;
 }
 
 .logo {
