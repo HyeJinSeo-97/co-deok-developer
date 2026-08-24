@@ -1,4 +1,9 @@
-import { HeroBanner, QuickMenus, SecretSaleProduct } from "./_ui";
+import {
+  HeroBanner,
+  ProductShorts,
+  QuickMenus,
+  SecretSaleProduct,
+} from "./_ui";
 
 export default function HomeRootPage() {
   return (
@@ -6,6 +11,7 @@ export default function HomeRootPage() {
       <HeroBanner />
       <QuickMenus />
       <SecretSaleProduct />
+      <ProductShorts />
     </div>
   );
 }
