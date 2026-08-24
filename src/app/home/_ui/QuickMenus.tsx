@@ -9,8 +9,8 @@ import { ScrollArea, ScrollBar } from "@/shared/shadcn/scroll-area";
  */
 export function QuickMenus() {
   return (
-    <div className={"space-y-2"}>
-      <div className={"w-8 h-1 bg-primary mx-auto"} />
+    <div className={"space-y-4"}>
+      <div className={"w-6 h-1 bg-primary mx-auto"} />
 
       <ScrollArea>
         {/* Card의 기본 overflow-hidden은 그리드를 잘라내 스크롤을 막으므로 해제하고,
@@ -26,7 +26,7 @@ export function QuickMenus() {
         <ScrollBar orientation={"horizontal"} className={"opacity-0"} />
       </ScrollArea>
 
-      <div className={"w-8 h-1 bg-primary mx-auto"} />
+      <div className={"w-6 h-1 bg-primary mx-auto"} />
     </div>
   );
 }

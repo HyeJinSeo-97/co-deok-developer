@@ -22,10 +22,14 @@ export function QuickMenuButton({ id, name }: QuickMenuItem) {
       <span
         className={cn(
           "inline-flex items-center justify-center size-12 md:size-18 rounded-md shadow-sm",
-          "bg-primary text-primary-foreground",
+          "bg-background",
         )}
       >
-        <QuickMenuIcon id={id} className={"size-6.5 md:size-10"} />
+        <QuickMenuIcon
+          id={id}
+          stroke={"var(--primary)"}
+          className={"size-6.5 md:size-10"}
+        />
       </span>
 
       <strong className={"text-caption md:text-label whitespace-nowrap"}>
