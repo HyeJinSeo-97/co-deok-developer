@@ -9,18 +9,24 @@ import { ScrollArea, ScrollBar } from "@/shared/shadcn/scroll-area";
  */
 export function QuickMenus() {
   return (
-    <ScrollArea>
-      {/* Card의 기본 overflow-hidden은 그리드를 잘라내 스크롤을 막으므로 해제하고,
-          Card 자체가 콘텐츠 너비를 갖도록 w-max를 올린다 */}
-      <Card variant={"transparent"} className={"w-max overflow-visible"}>
-        <CardContent className={"grid grid-flow-col grid-rows-2 gap-y-4"}>
-          {QUICK_MENU.map((menu) => (
-            <QuickMenuButton key={menu.id} {...menu} />
-          ))}
-        </CardContent>
-      </Card>
+    <div className={"space-y-4"}>
+      <div className={"w-6 h-1 bg-primary mx-auto"} />
 
-      <ScrollBar orientation={"horizontal"} className={"opacity-0"} />
-    </ScrollArea>
+      <ScrollArea>
+        {/* Card의 기본 overflow-hidden은 그리드를 잘라내 스크롤을 막으므로 해제하고,
+          Card 자체가 콘텐츠 너비를 갖도록 w-max를 올린다 */}
+        <Card variant={"transparent"} className={"w-max overflow-visible"}>
+          <CardContent className={"grid grid-flow-col grid-rows-2 gap-y-4"}>
+            {QUICK_MENU.map((menu) => (
+              <QuickMenuButton key={menu.id} {...menu} />
+            ))}
+          </CardContent>
+        </Card>
+
+        <ScrollBar orientation={"horizontal"} className={"opacity-0"} />
+      </ScrollArea>
+
+      <div className={"w-6 h-1 bg-primary mx-auto"} />
+    </div>
   );
 }
