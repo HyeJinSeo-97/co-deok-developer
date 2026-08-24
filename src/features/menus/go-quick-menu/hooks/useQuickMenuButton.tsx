@@ -3,12 +3,20 @@
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
 
+import { toast } from "@/shared/lib";
+
 export const useQuickMenuButton = () => {
   const router = useRouter();
 
   const goQuickMenu = useCallback(
     (name: string) => {
-      console.log({ name });
+      toast.success({
+        title: (
+          <span>
+            <b>{name}</b> 메뉴로 이동합니다.
+          </span>
+        ),
+      });
     },
     [router],
   );

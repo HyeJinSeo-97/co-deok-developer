@@ -15,22 +15,24 @@ export function QuickMenuButton({ id, name }: QuickMenuItem) {
   return (
     <Button
       variant={null}
-      className={"w-16 lg:w-20 h-auto flex-col items-center shrink-0"}
+      className={"w-16 md:w-22 h-auto flex-col items-center shrink-0"}
       onClick={() => goQuickMenu(name)}
     >
       <span
         className={
-          "inline-flex items-center justify-center size-12 lg:size-14 bg-accent rounded-md shadow-sm"
+          "inline-flex items-center justify-center size-12 md:size-18 bg-accent rounded-md shadow-sm"
         }
       >
         <QuickMenuIcon
           id={id}
           stroke={"var(--accent)"}
-          className={"size-6.5 lg:size-7"}
+          className={"size-6.5 md:size-10"}
         />
       </span>
 
-      <strong className={"text-caption whitespace-nowrap"}>{name}</strong>
+      <strong className={"text-caption md:text-label whitespace-nowrap"}>
+        {name}
+      </strong>
     </Button>
   );
 }
