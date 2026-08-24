@@ -1,10 +1,10 @@
 "use client";
 
-import styles from "@/app/styles/modules/home-header.module.css";
 import Image from "next/image";
 import Link from "next/link";
 
 import { useScrolled } from "@/app/home/_hooks";
+import styles from "@/app/styles/modules/home-header.module.css";
 import { GoGlobalSearchRouteButton } from "@/features/admin/go-global-search-page";
 import { GoCartRouteButton } from "@/features/shopping-cart/go-cart-page";
 import { cn } from "@/shared/lib/utils";
