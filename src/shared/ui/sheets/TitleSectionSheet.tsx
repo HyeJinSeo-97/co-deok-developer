@@ -1,6 +1,7 @@
+import { ComponentProps } from "react";
+
 import { cn } from "@/shared/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/shadcn/card";
-import { ComponentProps } from "react";
 
 interface TitleSectionSheetProps {
   title: string;

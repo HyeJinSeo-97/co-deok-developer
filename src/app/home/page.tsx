@@ -1,4 +1,4 @@
-import { SecretSaleProduct, HeroBanner, QuickMenus } from "./_ui";
+import { HeroBanner, QuickMenus,SecretSaleProduct } from "./_ui";
 
 export default function HomeRootPage() {
   return (

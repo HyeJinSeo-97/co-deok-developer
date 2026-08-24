@@ -1,7 +1,7 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useCallback } from "react";
+import { useRouter } from "next/navigation";
 
 import { toast } from "@/shared/lib";
 

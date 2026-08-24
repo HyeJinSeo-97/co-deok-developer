@@ -3,6 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import Autoplay from "embla-carousel-autoplay";
+
 import { useBannerStore } from "@/app/_stores/banner";
 import { Card, CardContent } from "@/shared/shadcn/card";
 import {
@@ -10,7 +12,6 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/shared/shadcn/carousel";
-import Autoplay from "embla-carousel-autoplay";
 
 export function HeroBanner() {
   const heroBanner = useBannerStore((state) => state.heroBanner);

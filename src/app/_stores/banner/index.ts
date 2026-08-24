@@ -1,3 +1,4 @@
+export { BannerStoreContext, useBannerStore } from "./banner.context";
 export type {
   BannerActions,
   BannerState,
@@ -5,4 +6,3 @@ export type {
   BannerStoreApi,
 } from "./banner.store";
 export { createBannerStore, initBannerStore } from "./banner.store";
-export { BannerStoreContext, useBannerStore } from "./banner.context";

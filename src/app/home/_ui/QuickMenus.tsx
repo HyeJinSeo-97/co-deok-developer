@@ -1,8 +1,7 @@
-import { QUICK_MENU } from "@/shared/model";
-import { ScrollArea, ScrollBar } from "@/shared/shadcn/scroll-area";
-
-import { Card, CardContent } from "@/shared/shadcn/card";
 import { QuickMenuButton } from "@/features/menus/go-quick-menu";
+import { QUICK_MENU } from "@/shared/model";
+import { Card, CardContent } from "@/shared/shadcn/card";
+import { ScrollArea, ScrollBar } from "@/shared/shadcn/scroll-area";
 
 /**
  * 홈 퀵메뉴 영역
