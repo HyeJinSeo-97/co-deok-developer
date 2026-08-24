@@ -6,7 +6,7 @@
   body {
     @apply w-full h-full flex;
     @apply text-base text-foreground;
-    @apply bg-accent;
+    @apply bg-background;
   }
 
   html {

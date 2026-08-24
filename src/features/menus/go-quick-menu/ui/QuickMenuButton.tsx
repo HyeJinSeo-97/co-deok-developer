@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuickMenuButton } from "@/features/menus/go-quick-menu/hooks";
+import { cn } from "@/shared/lib/utils";
 import type { QuickMenuItem } from "@/shared/model";
 import { Button } from "@/shared/shadcn/button";
 import { QuickMenuIcon } from "@/shared/ui/icons";
@@ -19,15 +20,12 @@ export function QuickMenuButton({ id, name }: QuickMenuItem) {
       onClick={() => goQuickMenu(name)}
     >
       <span
-        className={
-          "inline-flex items-center justify-center size-12 md:size-18 bg-accent rounded-md shadow-sm"
-        }
+        className={cn(
+          "inline-flex items-center justify-center size-12 md:size-18 rounded-md shadow-sm",
+          "bg-primary text-primary-foreground",
+        )}
       >
-        <QuickMenuIcon
-          id={id}
-          stroke={"var(--accent)"}
-          className={"size-6.5 md:size-10"}
-        />
+        <QuickMenuIcon id={id} className={"size-6.5 md:size-10"} />
       </span>
 
       <strong className={"text-caption md:text-label whitespace-nowrap"}>
