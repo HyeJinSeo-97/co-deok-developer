@@ -1,81 +1,180 @@
-/** 퀵메뉴 카테고리 단일 항목 */
-export interface QuickMenuCategory {
-  /** 카테고리 식별자 */
-  id: string;
-  /** 카테고리 표시명 */
-  name: string;
-  /** 트래킹용 data 속성 값 */
-  dataAttr: string;
-  /** 이동 경로 */
-  href: string;
-}
+import type { QuickMenuItem } from "./category.type";
 
-/** 홈 퀵메뉴 고정 카테고리 목록 */
-export const QUICK_MENU_CATEGORIES: readonly QuickMenuCategory[] = [
+/** 홈 퀵메뉴 고정 목록 */
+export const QUICK_MENU: readonly QuickMenuItem[] = [
   {
     id: "makeup",
     name: "메이크업",
     dataAttr: "홈^퀵메뉴^메이크업",
     href: "#",
+    isNew: false,
   },
   {
     id: "body-care",
     name: "바디케어",
     dataAttr: "홈^퀵메뉴^바디케어",
     href: "#",
+    isNew: false,
   },
   {
     id: "mask-pack",
     name: "마스크팩",
     dataAttr: "홈^퀵메뉴^마스크팩",
     href: "#",
+    isNew: false,
   },
   {
     id: "cleansing",
     name: "클렌징",
     dataAttr: "홈^퀵메뉴^클렌징",
     href: "#",
+    isNew: false,
   },
   {
     id: "skin-care",
     name: "스킨케어",
     dataAttr: "홈^퀵메뉴^스킨케어",
     href: "#",
+    isNew: false,
   },
   {
     id: "hair-care",
     name: "헤어케어",
     dataAttr: "홈^퀵메뉴^헤어케어",
     href: "#",
+    isNew: false,
   },
   {
     id: "beauty-tools",
     name: "뷰티소품",
     dataAttr: "홈^퀵메뉴^뷰티소품",
     href: "#",
+    isNew: false,
   },
   {
     id: "oral-care",
     name: "구강용품",
     dataAttr: "홈^퀵메뉴^구강용품",
     href: "#",
+    isNew: false,
+  },
+  {
+    id: "health-food",
+    name: "건강식품",
+    dataAttr: "홈^퀵메뉴^건강식품",
+    href: "#",
+    isNew: false,
+  },
+  {
+    id: "food",
+    name: "푸드",
+    dataAttr: "홈^퀵메뉴^푸드",
+    href: "#",
+    isNew: false,
   },
   {
     id: "sun-care",
     name: "선케어",
     dataAttr: "홈^퀵메뉴^선케어",
     href: "#",
+    isNew: false,
   },
   {
     id: "perfume",
     name: "향수",
     dataAttr: "홈^퀵메뉴^향수",
     href: "#",
+    isNew: false,
   },
   {
     id: "nail",
     name: "네일",
     dataAttr: "홈^퀵메뉴^네일",
     href: "#",
+    isNew: false,
+  },
+  {
+    id: "hobby-fancy",
+    name: "취미/팬시",
+    dataAttr: "홈^퀵메뉴^취미/팬시",
+    href: "#",
+    isNew: false,
+  },
+  {
+    id: "lux-edit",
+    name: "럭스에딧",
+    dataAttr: "홈^퀵메뉴^럭스에딧",
+    href: "#",
+    isNew: false,
+  },
+  {
+    id: "mens-edit",
+    name: "맨즈에딧",
+    dataAttr: "홈^퀵메뉴^맨즈에딧",
+    href: "#",
+    isNew: true,
+  },
+  {
+    id: "gift",
+    name: "선물하기",
+    dataAttr: "홈^퀵메뉴^선물하기",
+    href: "#",
+    isNew: false,
+  },
+  {
+    id: "membership-coupon",
+    name: "멤버십/쿠폰",
+    dataAttr: "홈^퀵메뉴^멤버십/쿠폰",
+    href: "#",
+    isNew: false,
+  },
+  {
+    id: "gift-card",
+    name: "기프트카드",
+    dataAttr: "홈^퀵메뉴^기프트카드",
+    href: "#",
+    isNew: false,
+  },
+  {
+    id: "awards",
+    name: "어워즈",
+    dataAttr: "홈^퀵메뉴^어워즈",
+    href: "#",
+    isNew: false,
+  },
+  {
+    id: "festa",
+    name: "페스타",
+    dataAttr: "홈^퀵메뉴^페스타",
+    href: "#",
+    isNew: true,
+  },
+  {
+    id: "home-living",
+    name: "홈리빙/가전",
+    dataAttr: "홈^퀵메뉴^홈리빙/가전",
+    href: "#",
+    isNew: false,
+  },
+  {
+    id: "health-goods",
+    name: "헬스건강용품",
+    dataAttr: "홈^퀵메뉴^헬스건강용품",
+    href: "#",
+    isNew: false,
+  },
+  {
+    id: "hygiene",
+    name: "위생용품",
+    dataAttr: "홈^퀵메뉴^위생용품",
+    href: "#",
+    isNew: false,
+  },
+  {
+    id: "fashion",
+    name: "패션",
+    dataAttr: "홈^퀵메뉴^패션",
+    href: "#",
+    isNew: false,
   },
 ] as const;
