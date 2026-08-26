@@ -1,4 +1,5 @@
 export { HeroBanner } from "./HeroBanner";
 export { ProductShorts } from "./ProductShorts";
+export { ProductShortsCard } from "./ProductShortsCard";
 export { QuickMenus } from "./QuickMenus";
 export { SecretSaleProduct } from "./SecretSaleProduct";
