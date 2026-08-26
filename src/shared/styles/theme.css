@@ -112,3 +112,15 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 }
+
+/**
+ * OAuth 브랜드 색상 토큰
+ * 각 플랫폼이 규정한 고정 색이므로 라이트/다크 테마에서 값이 바뀌지 않는다
+ */
+:root,
+.dark {
+  --brand-kakao: oklch(0.914 0.191 101.4); /* #FEE500 */
+  --brand-kakao-foreground: oklch(0 0 0 / 85%); /* #000000 85% */
+  --brand-naver: oklch(0.725 0.201 149.5); /* #03C75A */
+  --brand-naver-foreground: oklch(1 0 0); /* #FFFFFF */
+}

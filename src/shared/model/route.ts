@@ -12,3 +12,8 @@ export const SHOPPING_CART_PAGE = {
   label: "장바구니",
   href: "/shopping-cart",
 } as const;
+
+export const LOGIN_PAGE = {
+  label: "로그인",
+  href: "/login",
+} as const;
