@@ -1,9 +1,0 @@
-@import "tailwindcss";
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
-
-/* Shared UI styles */
-@import "../../shared/styles/theme.css";
-@import "../../shared/styles/new-theme.css";
-@import "../../shared/styles/font-size.css";
-@import "../../shared/styles/base.css";
