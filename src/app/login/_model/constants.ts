@@ -4,7 +4,7 @@ import type { OAuthProvider } from "./types";
  * OAuth 로그인 시작 경로 prefix
  * 실제 리다이렉트는 BFF 라우트 핸들러가 처리한다
  */
-export const OAUTH_START_PATH = "/api/v1/auth/oauth";
+export const OAUTH_START_PATH = "/api/v1/oauth";
 
 /** 로그인 화면에 노출할 OAuth 제공자 목록 (노출 순서대로) */
 export const OAUTH_PROVIDERS: readonly OAuthProvider[] = [
