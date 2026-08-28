@@ -29,14 +29,15 @@ export function HeroBanner() {
       opts={{ loop: true }}
     >
       <CarouselContent>
-        {heroBanner.map((banner) => (
+        {heroBanner.map((banner, index) => (
           <CarouselItem key={banner.id} className="basis-1/1 md:basis-3/4">
             <div className="p-1">
               <Card className="overflow-hidden p-0">
                 <CardContent className="relative h-100 p-0 sm:h-112.5 md:h-137.5 lg:h-162.5">
-                  <Link href={banner.href}>
+                  <Link href={banner.href} className="absolute inset-0">
                     <Image
                       fill
+                      priority={index === 0}
                       src={banner.imageUrl}
                       alt={banner.imageAlt}
                       sizes="(min-width: 768px) 75vw, 100vw"

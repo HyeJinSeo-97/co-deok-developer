@@ -1,7 +1,7 @@
-import styles from "@/app/styles/modules/home-header.module.css";
 import { GoBackRouteButton } from "@/features/admin/go-back-page";
 import { GoCartRouteButton } from "@/features/shopping-cart/go-cart-page";
 import { SEARCH_PAGE } from "@/shared/model";
+import styles from "@/shared/styles/modules/home-header.module.css";
 
 export default function SearchHeader() {
   return (

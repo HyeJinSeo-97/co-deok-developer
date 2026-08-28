@@ -18,3 +18,11 @@ export const pickRandomItems = <T>(items: readonly T[], count: number): T[] => {
 
   return copied.slice(0, size);
 };
+
+/**
+ * 충돌 가능성이 사실상 없는 무작위 식별자를 생성
+ * Web Crypto 기반이라 Math.random()과 달리 예측이 어려워
+ * CSRF state처럼 추측되면 안 되는 값에도 쓸 수 있다
+ * @return UUID v4 문자열
+ */
+export const createUuid = (): string => crypto.randomUUID();

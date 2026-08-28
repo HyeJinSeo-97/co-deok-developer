@@ -1,6 +1,6 @@
-import styles from "@/app/styles/modules/home-header.module.css";
 import { GoBackRouteButton } from "@/features/admin/go-back-page";
 import { SHOPPING_CART_PAGE } from "@/shared/model";
+import styles from "@/shared/styles/modules/home-header.module.css";
 
 export default function ShoppingCartHeader() {
   return (
