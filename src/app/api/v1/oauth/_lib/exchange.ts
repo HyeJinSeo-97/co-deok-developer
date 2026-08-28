@@ -1,31 +1,43 @@
 import type { SessionUser } from "@/shared/api/bff";
 
+import type {
+  KakaoProfileResponse,
+  NaverProfileResponse,
+  SessionTokens,
+  TokenResponse,
+} from "./exchange.type";
 import type { OAuthProviderConfig } from "./provider.type";
 
-/** 토큰 교환 응답에서 실제로 사용하는 필드 */
-interface TokenResponse {
-  access_token: string;
-}
+/**
+ * 토큰 엔드포인트에 요청을 보내고 응답을 검증
+ * 발급·갱신이 같은 엔드포인트·형식을 쓰므로 한곳에서 처리한다
+ * @param tokenUrl 제공자의 토큰 엔드포인트
+ * @param body form-urlencoded 본문
+ * @return 검증된 토큰 응답
+ * @throws 요청이 실패했거나 액세스 토큰이 없는 경우
+ */
+const requestToken = async (
+  tokenUrl: string,
+  body: URLSearchParams,
+): Promise<TokenResponse> => {
+  const response = await fetch(tokenUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
+    },
+    body,
+    cache: "no-store",
+  });
 
-/** 카카오 사용자 정보 응답 중 사용하는 부분 */
-interface KakaoProfileResponse {
-  id: number;
-  kakao_account?: {
-    profile?: {
-      nickname?: string;
-      profile_image_url?: string;
-    };
-  };
-}
+  if (!response.ok)
+    throw new Error(`토큰 요청에 실패했습니다. (${response.status})`);
 
-/** 네이버 사용자 정보 응답 중 사용하는 부분 */
-interface NaverProfileResponse {
-  response?: {
-    id: string;
-    nickname?: string;
-    profile_image?: string;
-  };
-}
+  const json = (await response.json()) as TokenResponse;
+
+  if (!json.access_token) throw new Error("응답에 액세스 토큰이 없습니다.");
+
+  return json;
+};
 
 /**
  * 인가 코드를 액세스 토큰으로 교환
@@ -33,7 +45,7 @@ interface NaverProfileResponse {
  * @param code 제공자가 콜백으로 넘겨준 인가 코드
  * @param redirectUri 인가 요청에 사용한 것과 완전히 동일한 콜백 URL
  * @param state 인가 요청에 사용한 state (네이버는 토큰 요청에도 필수)
- * @return 액세스 토큰
+ * @return 저장할 토큰 묶음 (액세스·리프레시)
  * @throws 교환에 실패한 경우
  */
 export const exchangeCodeForToken = async (
@@ -41,7 +53,7 @@ export const exchangeCodeForToken = async (
   code: string,
   redirectUri: string,
   state: string,
-): Promise<string> => {
+): Promise<SessionTokens> => {
   if (!config.clientId)
     throw new Error(`${config.id} 앱 키 환경 변수가 설정되지 않았습니다.`);
 
@@ -65,23 +77,53 @@ export const exchangeCodeForToken = async (
     if (config.clientSecret) body.set("client_secret", config.clientSecret);
   }
 
-  const response = await fetch(config.tokenUrl, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
-    },
+  const { access_token, refresh_token } = await requestToken(
+    config.tokenUrl,
     body,
-    cache: "no-store",
+  );
+
+  return {
+    provider: config.id,
+    accessToken: access_token,
+    refreshToken: refresh_token,
+  };
+};
+
+/**
+ * 만료된 액세스 토큰을 리프레시 토큰으로 재발급
+ * 카카오는 기존 리프레시 토큰의 만료가 1개월 미만일 때만 새 값을 내려주므로,
+ * 응답에 refresh_token이 없으면 기존 값을 그대로 유지해야 한다(덮어쓰면 로그아웃됨)
+ * @param config 제공자 설정
+ * @param refreshToken 저장해둔 리프레시 토큰
+ * @return 갱신된 토큰 묶음
+ * @throws 갱신에 실패한 경우 (리프레시 토큰도 만료된 상황)
+ */
+export const refreshAccessToken = async (
+  config: OAuthProviderConfig,
+  refreshToken: string,
+): Promise<SessionTokens> => {
+  if (!config.clientId)
+    throw new Error(`${config.id} 앱 키 환경 변수가 설정되지 않았습니다.`);
+
+  const body = new URLSearchParams({
+    grant_type: "refresh_token",
+    client_id: config.clientId,
+    refresh_token: refreshToken,
   });
 
-  if (!response.ok)
-    throw new Error(`토큰 교환에 실패했습니다. (${response.status})`);
+  if (config.clientSecret) body.set("client_secret", config.clientSecret);
 
-  const { access_token: accessToken } = (await response.json()) as TokenResponse;
+  const { access_token, refresh_token } = await requestToken(
+    config.tokenUrl,
+    body,
+  );
 
-  if (!accessToken) throw new Error("응답에 액세스 토큰이 없습니다.");
-
-  return accessToken;
+  return {
+    provider: config.id,
+    accessToken: access_token,
+    // 새 값이 없으면 기존 리프레시 토큰을 유지
+    refreshToken: refresh_token ?? refreshToken,
+  };
 };
 
 /**

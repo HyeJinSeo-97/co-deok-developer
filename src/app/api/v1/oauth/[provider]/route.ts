@@ -2,10 +2,10 @@ import { type NextRequest, NextResponse } from "next/server";
 
 import {
   buildRedirectUri,
-  createState,
   resolveProvider,
   setStateCookie,
 } from "@/app/api/v1/oauth/_lib";
+import { createUuid } from "@/shared/lib";
 
 /**
  * 동적 세그먼트를 담은 route context
@@ -44,7 +44,7 @@ export const GET = async (
   { params }: RouteContext,
 ): Promise<Response> => {
   const { provider } = await params;
-  console.log({ params: await params, provider });
+
   const config = resolveProvider(provider);
 
   // 지원하지 않는 제공자는 500 대신 로그인 화면으로 되돌린다
@@ -58,15 +58,30 @@ export const GET = async (
       new URL("/login?error=missing_credentials", request.url),
     );
 
-  const state = createState();
+  // CSRF 방어용 state — 추측 불가능해야 하므로 crypto 기반 UUID를 쓴다
+  const state = createUuid();
+
+  // config.authorizeUrl은 주소 뼈대일 뿐이라, 제공자가 요구하는 파라미터를 실어 보낸다.
+  // 이 쿼리들이 "우리 앱의 로그인이니 끝나면 이 주소로, 이 표식과 함께 돌려보내 달라"는 요청 내용 전부다.
+  //
+  // 문자열 연결 대신 searchParams.set()을 쓰는 이유는 URL 인코딩 때문이다.
+  // redirect_uri 값에는 `:`와 `/`가 들어 있어 그대로 붙이면 쿼리 구분자와 섞여 깨진다.
+  // set()은 이를 %3A · %2F로 자동 인코딩한다 (직접 조립하면 KOE006으로 이어지기 쉽다).
   const authorizeUrl = new URL(config.authorizeUrl);
 
+  // 인가 코드 방식으로 받겠다는 고정값
   authorizeUrl.searchParams.set("response_type", "code");
+  // 어느 앱의 로그인인지 식별
   authorizeUrl.searchParams.set("client_id", config.clientId);
+  // 로그인 후 돌아올 주소. 콘솔 등록값과 한 글자라도 다르면 KOE006
   authorizeUrl.searchParams.set(
     "redirect_uri",
     buildRedirectUri(request, config.id),
   );
+  // state만 성격이 다르다 — 제공자에게 주는 정보가 아니라 돌려받으려고 맡기는 값이다.
+  // 같은 값을 아래에서 httpOnly 쿠키에도 심어두고(setStateCookie),
+  // 콜백에서 둘을 대조해 위조된 요청을 걸러낸다.
+  // 공격자는 피해자 브라우저의 쿠키 값을 알 수 없으므로 대조에서 탈락한다.
   authorizeUrl.searchParams.set("state", state);
 
   const response = NextResponse.redirect(authorizeUrl);

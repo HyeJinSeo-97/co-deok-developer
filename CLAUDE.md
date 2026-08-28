@@ -23,7 +23,7 @@ Additional explanations are written in **Korean (설명)** for developers.
 1. [Overview](#1-overview) — 문서 사용법 · Core Directives
 2. [Getting Started](#2-getting-started) — Package Manager · Environments · Stack
 3. [Architecture](#3-architecture) — Layers · Private Folders · Public API · BFF/Auth · SSE · State · Forms
-4. [Conventions](#4-conventions) — Naming/Imports · TypeScript · React · Branch · Commit · Lint
+4. [Conventions](#4-conventions) — Naming/Imports · TypeScript · File Separation · React · Branch · Commit · Lint
 5. [Implementation Patterns](#5-implementation-patterns) — API · React Query · Zustand
 6. [UI & Styling](#6-ui--styling) — ShadCN · Styling · Component Consistency
 7. [Working Rules](#7-working-rules) — Code Change Rules · Pre-Completion Checklist
@@ -278,6 +278,7 @@ Follow the project naming conventions and use the `@/` path alias.
 - React components: `PascalCase.tsx`
 - Non-route folders under `src/app/`: `_` prefix — route-local (`_ui`, `_model`, `_hooks`, `_lib`, `_api`, `_queries`) and top-level only (`_stores`, `_providers`)
 - Store folder name: `_stores/[name]/` where `[name]` is `kebab-case`; files inside are `[name].store.ts` / `[name].context.ts`
+- Declaration files: `[name].type.ts` (types) · `constants.ts` / `config.ts` (const) · role-named files for functions — see [File Separation](#file-separation-by-declaration-kind)
 - Every folder exposes an `index.ts`; import folders, not files (see [3. Architecture](#3-architecture))
 - Imports: use the `@/` alias instead of parent relative paths (`../`, `../../`). Same-folder `./` imports are allowed. Import order: react/next → node_modules → `@/` → relative → css → side-effect.
   - `@/*` → `./src/*`
@@ -296,6 +297,88 @@ Always use TypeScript (`.ts` or `.tsx`) for new files. Avoid `any`; prefer narro
 
 설명:
 모든 신규 코드는 TypeScript로 작성하고, 가능하면 `any` 사용을 피해 명확한 타입을 정의합니다. 데이터 모델은 interface/type으로 재사용 가능하게 작성하며, 함수에는 명시적 반환 타입과 JSDoc 주석을 답니다.
+
+## File Separation by Declaration Kind
+
+Rule:
+Do not mix declaration kinds in one file. Types, constants, and functions must each live in their own file, placed in the FSD-appropriate folder for their reuse scope.
+
+**Exception:** a type used only by its own file — component `Props`, `page.tsx` params, a hook's params/return — stays inline in that file. Split a type out when it is shared, or could reasonably be shared, beyond the file that declares it.
+
+| Declaration                     | File                                        | Folder                                             |
+| ------------------------------- | ------------------------------------------- | -------------------------------------------------- |
+| `type` / `interface`            | `[name].type.ts` (or `types.ts` if generic) | `_model/` · `entities/*/model/` · `shared/model/`  |
+| `const` config / literal values | `constants.ts` or `config.ts`               | `_model/` · `entities/*/model/` · `shared/config/` |
+| functions (logic, helpers)      | `[name].ts` named after its role            | `_lib/` · `_api/` · `shared/lib/` · `shared/api/`  |
+
+설명:
+**타입 선언·설정 상수·함수는 한 파일에 섞지 않습니다.** 각각 별도 파일로 분리하고, 파일을 놓을 폴더는 [3. Architecture](#3-architecture)의 배치 규칙(재사용 범위)에 따라 정합니다.
+
+다만 **그 파일 안에서만 쓰이는 타입은 분리하지 않습니다.** 아래 "분리하지 않는 예외"를 참고합니다.
+
+- **`type` / `interface`** → 도메인 의미가 있으면 `[name].type.ts`, 해당 폴더 전반의 범용 타입이면 `types.ts`
+  - 예: `provider.type.ts`, `errors.type.ts`, `category.type.ts`
+- **`const` 설정·상수** → `constants.ts` (고정 리터럴) 또는 `config.ts` (환경·런타임에 따라 달라지는 설정)
+- **함수** → 역할을 드러내는 이름의 파일. 타입 파일에 함수를 같이 두지 않습니다.
+
+### 분리하지 않는 예외 — 그 파일에서만 쓰이는 타입
+
+**판단 기준은 "다른 파일이 이 타입을 쓸 수 있는가"입니다.** 파일 밖으로 나갈 일이 없는 타입은 선언한 자리에 그대로 둡니다.
+
+| 분리 ✅ (파일 밖에서 쓰임)                       | 분리 ❌ (그 파일 전용)                          |
+| ------------------------------------------------ | ----------------------------------------------- |
+| 도메인 모델 — `User`, `Product`, `QuickMenuItem` | 컴포넌트 `Props` 인터페이스                     |
+| API 요청·응답 — `ReqCreateTeam`, `ResUsers`      | `page.tsx` / `layout.tsx`의 params·searchParams |
+| 여러 화면이 공유하는 상태·에러 코드              | 특정 hook의 인자·반환 타입                      |
+|                                                  | route handler의 `RouteContext`                  |
+
+```typescript
+// ✅ 분리하지 않음 — 이 컴포넌트 밖에서 쓸 일이 없다
+interface OAuthButtonProps {
+  provider: OAuthProvider;
+  className?: string;
+}
+
+export function OAuthButton({ provider, className }: OAuthButtonProps) { ... }
+```
+
+```typescript
+// ✅ 분리 — 도메인 메타데이터라 다른 화면·API도 참조한다
+// user.type.ts
+export interface User {
+  id: string;
+  nickname: string;
+}
+```
+
+설명:
+`Props`나 params 타입을 굳이 파일로 빼면 파일 수만 늘고, 컴포넌트를 읽을 때 시그니처를 확인하러 다른 파일을 열어야 해서 오히려 읽기 어려워집니다. **한 곳에서만 쓰는 타입은 그 자리에 있을 때 가장 읽기 쉽습니다.**
+
+반대로 `User` 같은 도메인 타입은 화면·API·스토어가 함께 참조하므로, 한 컴포넌트 안에 두면 그 컴포넌트를 import해야만 타입을 쓸 수 있는 잘못된 의존이 생깁니다.
+
+**애매하면 인라인으로 두었다가, 두 번째 사용처가 생길 때 분리합니다.** 이는 `features`/`entities`를 미리 만들지 않는 [3. Architecture](#3-architecture)의 승격 규칙과 같은 원칙입니다.
+
+분리하는 이유:
+
+1. **변경 이유가 다릅니다.** 타입은 API 계약이 바뀔 때, 상수는 정책이 바뀔 때, 함수는 로직이 바뀔 때 수정됩니다. 한 파일에 두면 관련 없는 변경이 같은 파일에서 충돌합니다.
+2. **타입 파일은 런타임 코드를 갖지 않습니다.** `import type`으로만 참조되어 번들에서 완전히 제거될 수 있고, 순환 참조도 끊어집니다.
+3. **배치 판단이 쉬워집니다.** 타입만 여러 route에서 공유되는 경우가 흔한데, 파일이 나뉘어 있으면 그 파일만 `entities`/`shared`로 승격하면 됩니다.
+
+배치는 재사용 범위를 따릅니다. **도메인·라우트에 의존하는 값은 승격하지 않습니다** — 예를 들어 App Router 경로나 특정 도메인의 시크릿을 읽는 설정은 `shared`로 올리면 레이어 의존 방향이 뒤집히므로 route-local `_*`에 둡니다.
+
+```
+src/app/login/_model/
+├── index.ts          # 공개 API (re-export만)
+├── types.ts          # 범용 타입
+├── errors.type.ts    # 에러 도메인 타입
+└── constants.ts      # 상수
+
+src/app/api/v1/oauth/_lib/
+├── index.ts
+├── provider.type.ts   # 타입만
+├── provider.config.ts # 설정 상수 + 조회 함수
+└── redirect-uri.ts    # 함수
+```
 
 ## React / Next.js
 
@@ -771,6 +854,7 @@ Before completing a task, verify there are no TypeScript or ESLint errors, and t
 3. 새로 만든 폴더에 `index.ts`가 있고, 외부에서 파일을 직접 import하지 않는지
 4. 형제 route의 `_*`를 참조하지 않는지
 5. 새 스토어가 `src/app/_stores/[name]/`에, 새 Provider가 `src/app/_providers/`에 있고 각 `index.ts`에 등록됐는지
+6. 타입·상수·함수를 한 파일에 섞지 않고 각각 분리했는지 — 단, 그 파일에서만 쓰는 `Props`·params 타입은 인라인 유지 ([File Separation](#file-separation-by-declaration-kind))
 
 타입·린트 검사는 `package.json`에 정의된 스크립트를 확인해 실행합니다. 정의된 스크립트가 없으면 `npx tsc --noEmit` 등으로 직접 확인합니다.
 

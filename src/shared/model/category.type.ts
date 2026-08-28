@@ -11,4 +11,3 @@ export interface QuickMenuItem {
   /** 신규 항목 여부 (NEW 배지 노출) */
   isNew: boolean;
 }
-

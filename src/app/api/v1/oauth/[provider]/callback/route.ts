@@ -4,11 +4,11 @@ import {
   buildRedirectUri,
   clearStateCookie,
   exchangeCodeForToken,
-  fetchProfile,
   resolveProvider,
   setSessionCookie,
 } from "@/app/api/v1/oauth/_lib";
 import { OAUTH_STATE_COOKIE } from "@/shared/api/bff";
+import { HOME_PAGE } from "@/shared/model";
 
 /**
  * 동적 세그먼트를 담은 route context
@@ -34,6 +34,9 @@ const redirectToLogin = (
   request: NextRequest,
   reason: string,
 ): NextResponse => {
+  console.log("==========[CALLBACK]============");
+  console.log({ request, reason });
+  console.log("======================");
   const response = NextResponse.redirect(
     new URL(`/login?error=${reason}`, request.url),
   );
@@ -74,17 +77,20 @@ export const GET = async (
     return redirectToLogin(request, "invalid_state");
 
   try {
-    const accessToken = await exchangeCodeForToken(
+    // 프로필은 여기서 조회하지 않는다 — /api/v1/me가 매번 최신 값을 가져오므로
+    // 콜백은 토큰만 저장하고 빠르게 리다이렉트한다
+    const tokens = await exchangeCodeForToken(
       config,
       code,
       buildRedirectUri(request, config.id),
       state,
     );
-    const user = await fetchProfile(config, accessToken);
 
-    const response = NextResponse.redirect(new URL("/home", request.url));
+    const response = NextResponse.redirect(
+      new URL(HOME_PAGE.href, request.url),
+    );
 
-    setSessionCookie(response, user, request);
+    setSessionCookie(response, tokens, request);
     clearStateCookie(response);
 
     return response;

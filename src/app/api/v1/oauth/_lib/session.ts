@@ -1,39 +1,20 @@
 import type { NextRequest, NextResponse } from "next/server";
 
 import {
+  deleteCookie,
   OAUTH_STATE_COOKIE,
   SESSION_COOKIE,
-  type SessionUser,
+  type SessionTokens,
+  setSecureCookie,
 } from "@/shared/api/bff";
 
 /** state 쿠키 유효 시간 (초) — 로그인 왕복에만 필요해 10분이면 충분 */
 const STATE_MAX_AGE = 60 * 10;
 
-/** 세션 쿠키 유효 시간 (초) */
-const SESSION_MAX_AGE = 60 * 60 * 24 * 7;
-
-/**
- * 요청이 https인지 판단
- * `pnpm start`는 로컬에서도 NODE_ENV가 production이라 그 값으로 secure를 정하면
- * http localhost에 Secure 쿠키가 실려 브라우저가 저장을 거부한다(= 항상 state 불일치).
- * 따라서 실제 프로토콜을 기준으로 판단한다
- * @param request 들어온 요청
- * @return https면 true
- */
-const isSecureRequest = (request: NextRequest): boolean =>
-  request.headers.get("x-forwarded-proto") === "https" ||
-  new URL(request.url).protocol === "https:";
-
-/**
- * CSRF 방어용 state 값을 생성
- * @return 예측 불가능한 난수 문자열
- */
-export const createState = (): string => crypto.randomUUID();
-
 /**
  * state를 httpOnly 쿠키에 저장
- * sameSite는 반드시 lax — 콜백이 제공자에서 넘어오는 크로스 사이트 이동이라
- * strict면 쿠키가 전송되지 않아 검증이 항상 실패한다
+ * sameSite는 기본값 lax를 그대로 쓴다 — 콜백이 제공자에서 넘어오는 크로스 사이트
+ * 이동이라 strict면 쿠키가 전송되지 않아 검증이 항상 실패한다
  * @param response 쿠키를 실을 응답
  * @param state 저장할 state 값
  * @param request 프로토콜 판단에 사용할 요청
@@ -43,12 +24,11 @@ export const setStateCookie = (
   state: string,
   request: NextRequest,
 ): void => {
-  response.cookies.set(OAUTH_STATE_COOKIE, state, {
-    httpOnly: true,
-    sameSite: "lax",
-    secure: isSecureRequest(request),
-    path: "/",
+  setSecureCookie(response, {
+    name: OAUTH_STATE_COOKIE,
+    value: state,
     maxAge: STATE_MAX_AGE,
+    request,
   });
 };
 
@@ -57,26 +37,27 @@ export const setStateCookie = (
  * @param response 쿠키를 실을 응답
  */
 export const clearStateCookie = (response: NextResponse): void => {
-  response.cookies.delete(OAUTH_STATE_COOKIE);
+  deleteCookie(response, OAUTH_STATE_COOKIE);
 };
 
 /**
- * 로그인 세션을 httpOnly 쿠키에 기록
- * 데모 범위라 제공자 토큰 대신 조회한 프로필만 담아 토큰 수명 관리를 피한다
+ * 로그인 세션(토큰)을 httpOnly 쿠키에 기록
+ * 프로필이 아니라 토큰을 담아 /api/v1/me가 매번 최신 정보를 조회하게 한다
+ *
+ * maxAge를 지정하지 않아 **세션 쿠키**가 된다 — 브라우저(창)를 닫으면 토큰이 함께
+ * 사라져 다음 방문 때 재로그인해야 한다. 공용 PC에서 세션이 남지 않는 이점이 있다
  * @param response 쿠키를 실을 응답
- * @param user 저장할 사용자 정보
+ * @param tokens 저장할 토큰 묶음
  * @param request 프로토콜 판단에 사용할 요청
  */
 export const setSessionCookie = (
   response: NextResponse,
-  user: SessionUser,
+  tokens: SessionTokens,
   request: NextRequest,
 ): void => {
-  response.cookies.set(SESSION_COOKIE, JSON.stringify(user), {
-    httpOnly: true,
-    sameSite: "lax",
-    secure: isSecureRequest(request),
-    path: "/",
-    maxAge: SESSION_MAX_AGE,
+  setSecureCookie(response, {
+    name: SESSION_COOKIE,
+    value: JSON.stringify(tokens),
+    request,
   });
 };

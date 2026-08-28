@@ -1,1 +1,1 @@
-export * from "./useQuickMenuButton";
+export { useQuickMenuButton } from "./useQuickMenuButton";
