@@ -17,3 +17,8 @@ export const LOGIN_PAGE = {
   label: "로그인",
   href: "/login",
 } as const;
+
+export const ONBOARDING_PAGE = {
+  label: "추가 정보 입력",
+  href: "/onboarding",
+} as const;
