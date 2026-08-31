@@ -48,7 +48,7 @@ export interface SessionUser {
  * @param value 파싱된 쿠키 값
  * @return SessionTokens면 true
  */
-const isSessionTokens = (value: unknown): value is SessionTokens => {
+export const isSessionTokens = (value: unknown): value is SessionTokens => {
   if (typeof value !== "object" || value === null) return false;
 
   const { provider, accessToken } = value as Record<string, unknown>;
@@ -61,13 +61,16 @@ const isSessionTokens = (value: unknown): value is SessionTokens => {
 };
 
 /**
- * httpOnly 쿠키에서 세션 토큰을 읽어옴
- * @return 저장된 토큰. 세션이 없거나 값이 깨졌으면 null
+ * 쿠키 문자열을 세션 토큰으로 파싱
+ *
+ * 쿠키 저장소가 아니라 값을 인자로 받으므로 Edge 런타임(proxy)과
+ * Node 런타임(라우트 핸들러) 양쪽에서 함께 쓸 수 있다
+ * @param raw 세션 쿠키의 원본 문자열
+ * @return 파싱된 토큰. 값이 없거나 형태가 어긋나면 null
  */
-export const readSessionTokens = async (): Promise<SessionTokens | null> => {
-  const cookieStore = await cookies();
-  const raw = cookieStore.get(SESSION_COOKIE)?.value;
-
+export const parseSessionTokens = (
+  raw: string | undefined,
+): SessionTokens | null => {
   if (!raw) return null;
 
   try {
@@ -75,6 +78,17 @@ export const readSessionTokens = async (): Promise<SessionTokens | null> => {
 
     return isSessionTokens(parsed) ? parsed : null;
   } catch {
+    // 값이 깨졌으면 비로그인으로 취급한다
     return null;
   }
+};
+
+/**
+ * httpOnly 쿠키에서 세션 토큰을 읽어옴
+ * @return 저장된 토큰. 세션이 없거나 값이 깨졌으면 null
+ */
+export const readSessionTokens = async (): Promise<SessionTokens | null> => {
+  const cookieStore = await cookies();
+
+  return parseSessionTokens(cookieStore.get(SESSION_COOKIE)?.value);
 };
